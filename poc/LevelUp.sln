@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelUp", "LevelUp\LevelUp.csproj", "{792749CE-EF3A-4E7E-B1B7-8F9C532D18F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicWebApp", "BasicWebApp\BasicWebApp.csproj", "{8D08D163-6812-4612-B992-E776C6CEDDA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelUpWatcher", "LevelUpWatcher\LevelUpWatcher.csproj", "{A1F91F00-ED34-4AC0-9521-DEF66FDD6BFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{792749CE-EF3A-4E7E-B1B7-8F9C532D18F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{792749CE-EF3A-4E7E-B1B7-8F9C532D18F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{792749CE-EF3A-4E7E-B1B7-8F9C532D18F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{792749CE-EF3A-4E7E-B1B7-8F9C532D18F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D08D163-6812-4612-B992-E776C6CEDDA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D08D163-6812-4612-B992-E776C6CEDDA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D08D163-6812-4612-B992-E776C6CEDDA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D08D163-6812-4612-B992-E776C6CEDDA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1F91F00-ED34-4AC0-9521-DEF66FDD6BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F91F00-ED34-4AC0-9521-DEF66FDD6BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F91F00-ED34-4AC0-9521-DEF66FDD6BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F91F00-ED34-4AC0-9521-DEF66FDD6BFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
