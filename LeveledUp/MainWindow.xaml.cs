@@ -26,7 +26,29 @@ namespace LeveledUp
         public MainWindow()
         {
             InitializeComponent();
+            SetupTray();
             _watcher.OnFileChange += _watcher_OnFileChange;
+        }
+
+        private void SetupTray()
+        {
+            NotifyIcon ni = new NotifyIcon();
+            ni.Icon = new System.Drawing.Icon("Main.ico");
+            ni.Visible = true;
+            ni.DoubleClick +=
+                delegate(object sender, EventArgs args)
+                {
+                    this.Show();
+                    this.WindowState = WindowState.Normal;
+                };
+        }
+
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == System.Windows.WindowState.Minimized)
+                this.Hide();
+
+            base.OnStateChanged(e);
         }
 
         void _watcher_OnFileChange(object sender, EventArgs e)
