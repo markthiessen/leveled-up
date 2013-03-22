@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fleck">
+      <HintPath>..\packages\Fleck.0.9.6.18\lib\net40\Fleck.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>packages\Microsoft.AspNet.SignalR.Core.1.0.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Fleck;
 using Microsoft.Owin.Hosting;
 
 namespace LeveledUp
@@ -53,12 +54,18 @@ namespace LeveledUp
 
         void _watcher_OnFileChange(object sender, EventArgs e)
         {
+            WriteMessage("Change detected");
+            WriteMessage("Notifying clients...");
+
+            SendNotificationMessage("LeveledUp");
+        }
+
+        private void WriteMessage(string message)
+        {
             Dispatcher.Invoke(() =>
             {
-                LogBox.AppendText("Change detected" + Environment.NewLine);
-                LogBox.AppendText("Notifying clients..." + Environment.NewLine);
+                LogBox.AppendText(message + Environment.NewLine);
             });
-            LevelUpHub.SendMessage("LeveledUp");
         }
 
         private void OpenFolderButton_Click(object sender, RoutedEventArgs e)
@@ -68,7 +75,7 @@ namespace LeveledUp
             if (result == System.Windows.Forms.DialogResult.OK)
                 FolderBox.Text = dialog.SelectedPath;
         }
-        
+
         private bool running = false;
         private void StartStopButton_Click(object sender, RoutedEventArgs e)
         {
@@ -91,17 +98,46 @@ namespace LeveledUp
             }
         }
 
+        private WebSocketServer server;
+        private List<IWebSocketConnection> allSockets = new List<IWebSocketConnection>();
         private void StartNotificationServer()
         {
+            server = new WebSocketServer("ws://localhost:9797");
+            server.Start(socket =>
+                {
+                    socket.OnOpen = () =>
+                        {
+                            WriteMessage("Open!");
+                            allSockets.Add(socket);
+                        };
+                    socket.OnClose = () =>
+                        {
+                            WriteMessage("Close!");
+                            allSockets.Remove(socket);
+                        };
+
+                    socket.OnMessage = message => socket.Send(message);
+                });
             const string url = "http://localhost:9797";
-          
-            _server = WebApplication.Start<LevelUpStartup>(url);
-            LogBox.AppendText(string.Format("Server running on {0}", url) + Environment.NewLine);
+
+            
+            WriteMessage(string.Format("Server running on {0}", url));
         }
+
+
+        private void SendNotificationMessage(string message)
+        {
+            if (server != null)
+                foreach (var socket in allSockets)
+                {
+                    socket.Send(message);
+                }
+        }
+
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if(_server!=null)
+            if (_server != null)
                 _server.Dispose();
         }
     }
