@@ -33,7 +33,7 @@ namespace LeveledUp
         private void SetupTray()
         {
             NotifyIcon ni = new NotifyIcon();
-            ni.Icon = new System.Drawing.Icon("Main.ico");
+            ni.Icon = new System.Drawing.Icon("mushroom.ico");
             ni.Visible = true;
             ni.DoubleClick +=
                 delegate(object sender, EventArgs args)
@@ -45,19 +45,19 @@ namespace LeveledUp
 
         protected override void OnStateChanged(EventArgs e)
         {
-            if (WindowState == System.Windows.WindowState.Minimized)
-                this.Hide();
+            if (WindowState == WindowState.Minimized)
+                Hide();
 
             base.OnStateChanged(e);
         }
 
         void _watcher_OnFileChange(object sender, EventArgs e)
         {
-            Dispatcher.Invoke((Action)(() =>
+            Dispatcher.Invoke(() =>
             {
                 LogBox.AppendText("Change detected" + Environment.NewLine);
                 LogBox.AppendText("Notifying clients..." + Environment.NewLine);
-            }));
+            });
             LevelUpHub.SendMessage("LeveledUp");
         }
 
@@ -68,22 +68,33 @@ namespace LeveledUp
             if (result == System.Windows.Forms.DialogResult.OK)
                 FolderBox.Text = dialog.SelectedPath;
         }
-
-        private void StopButton_Click(object sender, RoutedEventArgs e)
+        
+        private bool running = false;
+        private void StartStopButton_Click(object sender, RoutedEventArgs e)
         {
-            _watcher.Stop();
-        }
+            if (!running)
+            {
+                if (string.IsNullOrWhiteSpace(FolderBox.Text) || string.IsNullOrWhiteSpace(FileTypeFilterBox.Text))
+                    return;
 
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-            _watcher.Start(FolderBox.Text, FileTypeFilterBox.Text);
-            if(_server==null)
-                StartNotificationServer();
+                _watcher.Start(FolderBox.Text.Trim(), FileTypeFilterBox.Text.Trim());
+                if (_server == null)
+                    StartNotificationServer();
+                running = true;
+                StartStopButton.Content = "Stop";
+            }
+            else
+            {
+                _watcher.Stop();
+                running = false;
+                StartStopButton.Content = "Start";
+            }
         }
 
         private void StartNotificationServer()
         {
-            string url = "http://localhost:9797";
+            const string url = "http://localhost:9797";
+          
             _server = WebApplication.Start<LevelUpStartup>(url);
             LogBox.AppendText(string.Format("Server running on {0}", url) + Environment.NewLine);
         }
