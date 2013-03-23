@@ -70,23 +70,14 @@ namespace LevelUp
 		}
 
         private string scriptToAppend =
-                @"<script type='text/javascript' src='/Scripts/jquery.signalR-1.0.1.js'>
-                </script>
-<script type='text/javascript' src='http://localhost:9797/signalr/hubs'>
-                </script>
-<script type='text/javascript'>
-$(function(){
-$.connection.hub.url = 'http://localhost:9797/signalr' 
-var chat = $.connection.levelUpHub;
-  chat.client.broadcastMessage = function (message) {
-        if(message=='LeveledUp')
-            alert('!LeveledUp');
-    };
-  $.connection.hub.start().done(function () {
-
-  });
-
-});
+@"<script type='text/javascript'>
+	(function(){
+		var ws = new WebSocket('ws://localhost:9797'); 
+		ws.onopen = function () {
+			console.log('Connected to leveledUp change notification server....')
+		};				 
+		ws.onmessage = function (evt) { window.location.reload(); };
+	})();			
 </script>
 </body>";
 

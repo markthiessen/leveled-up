@@ -1,0 +1,16 @@
+<!doctype HTML>
+<html>
+<head></head>
+	<body>
+		Hello there..
+		<script type="text/javascript">
+		    (function(){
+		    	var ws = new WebSocket("ws://localhost:9797"); 
+		    	ws.onopen = function () {
+				    console.log('Connected to leveledUp change notification server....')
+				};				 
+				ws.onmessage = function (evt) { window.location.reload(); };
+		    })();			
+		</script>
+	</body>
+</html>
