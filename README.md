@@ -25,4 +25,11 @@ And then in your HTML file somewhere.. you could just embed a tiny little script
 
 You probably don't want that to make it's way into your release builds. For now, it's just an experiment. I'd like to find a nice way to embed this automatically in some scenarios..
 
-I've played a bit with an HTTP Module for ASP.NET projects, but that's not ready for primetime yet as it still requires more modification to your project to get working.
+In an ASP.NET MVC project using razor, for example, you can wrap that script in this:
+
+@if (HttpContext.Current.IsDebuggingEnabled)
+    {
+       ...
+    }
+
+It's a start..
