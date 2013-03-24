@@ -6,6 +6,7 @@ Two things:
 
 1) A simple Windows app that hosts a WebSocket server and can monitor a directory for changes.
 When things are a-changin', clients are notified.
+
 2) A chrome extension that will connect to the file watcher and reload your page when files change.
 
 Why?
