@@ -10,7 +10,7 @@
     "default_icon": "icon.png"
   },
   "permissions": [
-    "tabs", "http://*/*", "notifications"
+    "tabs", "<all_urls>", "notifications"
   ],
   "web_accessible_resources": [
     "icon.png"
