@@ -7,7 +7,8 @@ To get started using Leveled-UP+
    c) Click Start!  The file system watcher is now running.
 
 2. Use the chrome extension.
-   a) If you haven't yet installed the extension, drag the .crx file onto a chrome window and click 'Add'.
+   a) If you haven't yet installed the extension, go to Tools->Extensions and then
+       drag the .crx file onto the chrome window and click 'Add'.
    b) Navigate to the site you're working on in chrome.
    c) Click the Leveled-UP+ mushroom icon beside the omnibox.
 
