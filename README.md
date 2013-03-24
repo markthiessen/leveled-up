@@ -13,6 +13,9 @@ Because during web development, it's nice to have your browser auto-refresh for 
 Clicking refresh every few seconds sucks.
 
 How to use?
+
+There's a current release in the build folder.  
+
 1. Start up LeveledUp.exe
    a) Choose a folder to monitor (your project folder!)
    b) Adjust the file types if you need to. Follow the example format.
