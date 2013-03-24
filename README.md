@@ -2,34 +2,27 @@ leveled-up
 ==========
 
 What is this?
-A simple Windows app that hosts a WebSocket server and can monitor a directory for changes.
+Two things: 
+
+1) A simple Windows app that hosts a WebSocket server and can monitor a directory for changes.
 When things are a-changin', clients are notified.
+2) A chrome extension that will connect to the file watcher and reload your page when files change.
 
 Why?
-Because during web development, it's nice to have your browser auto-refresh for you.
+Because during web development, it's nice to have your browser auto-refresh for you when you make little changes.. 
+Clicking refresh every few seconds sucks.
 
 How to use?
-Start up the LeveledUp.exe, set the directory you want to monitor (your project folder!), modify the file type filter if you like, and hit 'Start'.
+1. Start up LeveledUp.exe
+   a) Choose a folder to monitor (your project folder!)
+   b) Adjust the file types if you need to. Follow the example format.
+   c) Click Start!  The file system watcher is now running.
 
-And then in your HTML file somewhere.. you could just embed a tiny little script in the page you are working on to connect to the socket and auto-reload your page:
+2. Use the chrome extension.
+   a) If you haven't yet installed the extension, drag the .crx file onto a chrome window and click 'Add'.
+   b) Navigate to the site you're working on in chrome.
+   c) Click the Leveled-UP+ mushroom icon beside the omnibox.
 
-<script type="text/javascript">
-    (function(){
-    	var ws = new WebSocket("ws://localhost:9797"); 
-    	ws.onopen = function () {
-		    console.log('Connected to leveledUp change notification server....')
-		};				 
-		ws.onmessage = function (evt) { window.location.reload(); };
-    })();			
-</script>
-
-You probably don't want that to make it's way into your release builds. For now, it's just an experiment. I'd like to find a nice way to embed this automatically in some scenarios..
-
-In an ASP.NET MVC project using razor, for example, you can wrap that script in this:
-
-@if (HttpContext.Current.IsDebuggingEnabled)
-    {
-       ...
-    }
-
-It's a start..
+3. Work!
+   Now when you make changes to files in your project, your browser should automatically reload, saving you time
+   and millions of dollars!
