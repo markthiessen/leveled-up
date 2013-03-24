@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using Fleck;
+using System.Drawing;
 
 namespace LeveledUp
 {
@@ -22,8 +24,8 @@ namespace LeveledUp
 
         private void SetupTray()
         {
-            NotifyIcon ni = new NotifyIcon();
-            ni.Icon = new System.Drawing.Icon("mushroom.ico");
+            NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
+            ni.Icon = Properties.Resources.mushroom;
             ni.Visible = true;
             ni.DoubleClick +=
                 delegate(object sender, EventArgs args)

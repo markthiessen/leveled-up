@@ -1,6 +1,5 @@
 {
   "manifest_version": 2,
-
   "name": "LeveledUp Auto-Reload",
   "description": "This extension automatically reloads the browser when the contents of a folder change.",
   "version": "1.0",
@@ -11,6 +10,9 @@
     "default_icon": "icon.png"
   },
   "permissions": [
-    "tabs", "http://*/*"
+    "tabs", "http://*/*", "notifications"
+  ],
+  "web_accessible_resources": [
+    "icon.png"
   ]
 }
