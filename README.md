@@ -29,7 +29,8 @@ Start up LeveledUp.exe
 
 Use the chrome extension.
 
-1. If you haven't yet installed the extension, drag the .crx file onto a chrome window and click 'Add'.
+1. If you haven't yet installed the extension, go to Tools->Extensions and then
+  drag the .crx file onto the chrome window and click 'Add'.
 
 2. Navigate to the site you're working on in chrome.
 
