@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Fleck;
 
 namespace LeveledUp
@@ -20,13 +10,13 @@ namespace LeveledUp
     {
 
         readonly LevelUpWatcher _watcher = new LevelUpWatcher();
-        private bool serverRunning = false;
         private IDisposable _server;
 
         public MainWindow()
         {
             InitializeComponent();
             SetupTray();
+
             _watcher.OnFileChange += _watcher_OnFileChange;
         }
 
@@ -81,7 +71,10 @@ namespace LeveledUp
             if (!running)
             {
                 if (string.IsNullOrWhiteSpace(FolderBox.Text) || string.IsNullOrWhiteSpace(FileTypeFilterBox.Text))
+                {
+                    WriteMessage("Folder && File Types cannot be empty...");
                     return;
+                }
 
                 _watcher.Start(FolderBox.Text.Trim(), FileTypeFilterBox.Text.Trim());
                 if (_server == null)
