@@ -10,6 +10,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 		  'Leveled-UP+ Auto reload activated on this page!',
 		  'Make sure the Leveled-UP+ desktop app is running!'
 		);
+		chrome.browserAction.setIcon({path:"active.png", tabId:tab.id});
 		notification.show();
     }
 });
