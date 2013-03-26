@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Forms;
 using Fleck;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace LeveledUp
 {
@@ -13,6 +14,8 @@ namespace LeveledUp
 
         readonly LevelUpWatcher _watcher = new LevelUpWatcher();
         private IDisposable _server;
+        private string command;
+        private string folder;
 
         public MainWindow()
         {
@@ -46,6 +49,15 @@ namespace LeveledUp
         void _watcher_OnFileChange(object sender, EventArgs e)
         {
             WriteMessage("Change detected");
+            WriteMessage("Running Command " + command);
+
+            var p = new Process();
+            p.StartInfo.FileName = "CMD.exe";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.Arguments = "/C " + command;
+            p.StartInfo.WorkingDirectory = folder;
+            p.Start();
+            p.WaitForExit();
             WriteMessage("Notifying clients...");
 
             SendNotificationMessage("LeveledUp");
@@ -78,7 +90,10 @@ namespace LeveledUp
                     return;
                 }
 
-                _watcher.Start(FolderBox.Text.Trim(), FileTypeFilterBox.Text.Trim());
+                this.folder = FolderBox.Text.Trim();
+                this.command = CommandBox.Text.Trim();
+
+                _watcher.Start(folder, FileTypeFilterBox.Text.Trim());
                 if (_server == null)
                     StartNotificationServer();
                 running = true;
