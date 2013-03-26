@@ -5,13 +5,15 @@
     <Grid Margin="0,0,0,0" Height="322" VerticalAlignment="Top">
         <Label Content="Leveled UP+ File System Watcher" FontWeight="Bold" Margin="16,0,252,293"/>
         <Label Content="Monitor this folder for changes:" HorizontalAlignment="Left" Margin="29,50,0,0" VerticalAlignment="Top"/>
-        <Button Name="StartStopButton" Content="Start" HorizontalAlignment="Left" Margin="385,175,0,0" VerticalAlignment="Top" Width="75" Click="StartStopButton_Click" Height="32"/>
+        <Button Name="StartStopButton" Content="Start" HorizontalAlignment="Left" Margin="385,236,0,0" VerticalAlignment="Top" Width="75" Click="StartStopButton_Click" Height="32"/>
         <TextBox Name="FolderBox" HorizontalAlignment="Left" Height="23" Margin="29,78,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="431"/>
         <Button Name="OpenFolderButton" Content="..." HorizontalAlignment="Left" Margin="465,78,0,0" VerticalAlignment="Top" Width="25" Height="23" Click="OpenFolderButton_Click"/>
-        <Label Content="Watch these file types:" HorizontalAlignment="Left" Margin="29,118,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="FileTypeFilterBox" HorizontalAlignment="Left" Height="23" Margin="29,144,0,0" TextWrapping="Wrap" Text="*.js|*.css|*.cshtml|*.html|*.htm" VerticalAlignment="Top" Width="431"/>
-        <TextBox Name="LogBox" HorizontalAlignment="Left" Height="74" Margin="29,248,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="431" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
-        <Label Content="Log:" HorizontalAlignment="Left" Margin="29,224,0,0" VerticalAlignment="Top"/>
+        <Label Content="Watch these file types:" HorizontalAlignment="Left" Margin="29,115,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="FileTypeFilterBox" HorizontalAlignment="Left" Height="23" Margin="29,141,0,0" TextWrapping="Wrap" Text="*.js|*.css|*.cshtml|*.html|*.htm" VerticalAlignment="Top" Width="431"/>
+        <TextBox Name="LogBox" HorizontalAlignment="Left" Height="74" Margin="29,280,0,-32" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="431" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+        <Label Content="Log:" HorizontalAlignment="Left" Margin="29,254,0,0" VerticalAlignment="Top"/>
+        <Label Content="Run this command:" HorizontalAlignment="Left" Margin="29,175,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="CommandBox" Height="23" Margin="29,201,57,0" TextWrapping="Wrap" Text="lessc Content\bootstrap.less Content\bootstrap.css" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
