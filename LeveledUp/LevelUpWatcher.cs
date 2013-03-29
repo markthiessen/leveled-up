@@ -9,7 +9,7 @@ namespace LeveledUp
     public class LevelUpWatcher
     {
         private List<FileSystemWatcher> watchers = new List<FileSystemWatcher>();
-        public event EventHandler OnFileChange;
+        public event EventHandler<FileSystemEventArgs> OnFileChange;
 
 
         public void Start(string directory, string filters)
@@ -48,7 +48,7 @@ namespace LeveledUp
         {
             if (OnFileChange != null)
             {
-                OnFileChange(this, new EventArgs());
+                OnFileChange(this, e);
             }
         }
     }

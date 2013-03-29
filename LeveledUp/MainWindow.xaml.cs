@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Fleck;
 using System.Drawing;
 using System.Diagnostics;
@@ -13,24 +14,32 @@ namespace LeveledUp
     {
 
         readonly LevelUpWatcher _watcher = new LevelUpWatcher();
-        private IDisposable _server;
-        private string command;
-        private string folder;
+        private string _command;
+        private string _folder;
 
         public MainWindow()
         {
             InitializeComponent();
+            DwmDropShadow.DropShadowToWindow(this);
             SetupTray();
 
             _watcher.OnFileChange += _watcher_OnFileChange;
+            this.MouseDown += Window_MouseDown;
         }
 
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+
+        private NotifyIcon notifyIcon;
         private void SetupTray()
         {
-            NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
-            ni.Icon = Properties.Resources.mushroom;
-            ni.Visible = true;
-            ni.DoubleClick +=
+            notifyIcon = new NotifyIcon();
+            notifyIcon.Icon = Properties.Resources.mushroom;
+            notifyIcon.Visible = true;
+            notifyIcon.DoubleClick +=
                 delegate(object sender, EventArgs args)
                 {
                     this.Show();
@@ -46,18 +55,34 @@ namespace LeveledUp
             base.OnStateChanged(e);
         }
 
-        void _watcher_OnFileChange(object sender, EventArgs e)
+        private FileChange _lastFileChange;
+        void _watcher_OnFileChange(object sender, FileSystemEventArgs e)
         {
-            WriteMessage("Change detected");
-            WriteMessage("Running Command " + command);
+            if (_lastFileChange != null && e.FullPath == _lastFileChange.FileName && _lastFileChange.Time.AddSeconds(1) > DateTime.Now)
+                return; //duplicate event
 
-            var p = new Process();
-            p.StartInfo.FileName = "CMD.exe";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.Arguments = "/C " + command;
-            p.StartInfo.WorkingDirectory = folder;
-            p.Start();
-            p.WaitForExit();
+            _lastFileChange = new FileChange { Time = DateTime.Now, FileName = e.FullPath };
+            WriteMessage("Change detected");
+
+            if (!string.IsNullOrWhiteSpace(_command))
+            {
+                WriteMessage("Running Command " + _command);
+
+                var p = new Process
+                            {
+                                StartInfo =
+                                    {
+                                        FileName = "CMD.exe",
+                                        CreateNoWindow = true,
+                                        Arguments = "/C " + _command,
+                                        WorkingDirectory = _folder,
+                                        WindowStyle = ProcessWindowStyle.Hidden
+                                    }
+                            };
+
+                p.Start();
+                p.WaitForExit();
+            }
             WriteMessage("Notifying clients...");
 
             SendNotificationMessage("LeveledUp");
@@ -68,6 +93,7 @@ namespace LeveledUp
             Dispatcher.Invoke(() =>
             {
                 LogBox.AppendText(message + Environment.NewLine);
+                LogBox.ScrollToEnd();
             });
         }
 
@@ -90,11 +116,11 @@ namespace LeveledUp
                     return;
                 }
 
-                this.folder = FolderBox.Text.Trim();
-                this.command = CommandBox.Text.Trim();
+                _folder = FolderBox.Text.Trim();
+                _command = CommandBox.Text.Trim();
 
-                _watcher.Start(folder, FileTypeFilterBox.Text.Trim());
-                if (_server == null)
+                _watcher.Start(_folder, FileTypeFilterBox.Text.Trim());
+                if (server == null)
                     StartNotificationServer();
                 running = true;
                 StartStopButton.Content = "Stop";
@@ -129,7 +155,7 @@ namespace LeveledUp
                 });
             const string url = "http://localhost:9797";
 
-            
+
             WriteMessage(string.Format("Server running on {0}", url));
         }
 
@@ -146,8 +172,29 @@ namespace LeveledUp
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (_server != null)
-                _server.Dispose();
+            if (server != null)
+                server.Dispose();
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            notifyIcon.Dispose();
+        }
+
+        private void MinimizeWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow(this);
+        }
+        private void CloseWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.CloseWindow(this);
+
+        }
+    }
+
+    public class FileChange
+    {
+        public DateTime Time { get; set; }
+        public string FileName { get; set; }
     }
 }
