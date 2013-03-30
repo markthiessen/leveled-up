@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Fleck;
-using System.Drawing;
 using System.Diagnostics;
 
 namespace LeveledUp
@@ -14,23 +13,28 @@ namespace LeveledUp
     {
 
         readonly LevelUpWatcher _watcher = new LevelUpWatcher();
-        private string _command;
-        private string _folder;
+        private WatcherSettings _settings;
+
 
         public MainWindow()
         {
             InitializeComponent();
             DwmDropShadow.DropShadowToWindow(this);
-            SetupTray();
+            _settings = WatcherSettings.Load();
+            FolderBox.Text = _settings.FolderToWatch;
+            FileTypeFilterBox.Text = _settings.WatchedFileTypes;
+            CommandBox.Text = _settings.Command;
 
+
+            SetupTray();
             _watcher.OnFileChange += _watcher_OnFileChange;
-            this.MouseDown += Window_MouseDown;
+            MouseDown += Window_MouseDown;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+                DragMove();
         }
 
         private NotifyIcon notifyIcon;
@@ -42,8 +46,8 @@ namespace LeveledUp
             notifyIcon.DoubleClick +=
                 delegate(object sender, EventArgs args)
                 {
-                    this.Show();
-                    this.WindowState = WindowState.Normal;
+                    Show();
+                    WindowState = WindowState.Normal;
                 };
         }
 
@@ -64,9 +68,9 @@ namespace LeveledUp
             _lastFileChange = new FileChange { Time = DateTime.Now, FileName = e.FullPath };
             WriteMessage("Change detected");
 
-            if (!string.IsNullOrWhiteSpace(_command))
+            if (!string.IsNullOrWhiteSpace(_settings.Command))
             {
-                WriteMessage("Running Command " + _command);
+                WriteMessage("Running Command " + _settings.Command);
 
                 var p = new Process
                             {
@@ -74,8 +78,8 @@ namespace LeveledUp
                                     {
                                         FileName = "CMD.exe",
                                         CreateNoWindow = true,
-                                        Arguments = "/C " + _command,
-                                        WorkingDirectory = _folder,
+                                        Arguments = "/C " + _settings.Command,
+                                        WorkingDirectory = _settings.FolderToWatch,
                                         WindowStyle = ProcessWindowStyle.Hidden
                                     }
                             };
@@ -110,20 +114,24 @@ namespace LeveledUp
         {
             if (!running)
             {
+
                 if (string.IsNullOrWhiteSpace(FolderBox.Text) || string.IsNullOrWhiteSpace(FileTypeFilterBox.Text))
                 {
                     WriteMessage("Folder && File Types cannot be empty...");
                     return;
                 }
 
-                _folder = FolderBox.Text.Trim();
-                _command = CommandBox.Text.Trim();
+                _settings.FolderToWatch = FolderBox.Text.Trim();
+                _settings.WatchedFileTypes = FileTypeFilterBox.Text.Trim();
+                _settings.Command = CommandBox.Text.Trim();
 
-                _watcher.Start(_folder, FileTypeFilterBox.Text.Trim());
-                if (server == null)
+                _watcher.Start(_settings.FolderToWatch, _settings.WatchedFileTypes);
+                if (_server == null)
                     StartNotificationServer();
                 running = true;
                 StartStopButton.Content = "Stop";
+
+                _settings.Save();
             }
             else
             {
@@ -133,12 +141,12 @@ namespace LeveledUp
             }
         }
 
-        private WebSocketServer server;
-        private List<IWebSocketConnection> allSockets = new List<IWebSocketConnection>();
+        private WebSocketServer _server;
+        private readonly List<IWebSocketConnection> allSockets = new List<IWebSocketConnection>();
         private void StartNotificationServer()
         {
-            server = new WebSocketServer("ws://localhost:9797");
-            server.Start(socket =>
+            _server = new WebSocketServer("ws://localhost:9797");
+            _server.Start(socket =>
                 {
                     socket.OnOpen = () =>
                         {
@@ -162,7 +170,7 @@ namespace LeveledUp
 
         private void SendNotificationMessage(string message)
         {
-            if (server != null)
+            if (_server != null)
                 foreach (var socket in allSockets)
                 {
                     socket.Send(message);
@@ -172,8 +180,8 @@ namespace LeveledUp
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (server != null)
-                server.Dispose();
+            if (_server != null)
+                _server.Dispose();
         }
 
         protected override void OnClosed(EventArgs e)
