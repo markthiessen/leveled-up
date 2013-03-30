@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace LeveledUp
@@ -31,16 +27,21 @@ namespace LeveledUp
             var fullFilePath = Path.Combine(folderPath, SaveFileName);
             if (File.Exists(fullFilePath))
             {
+                var reader = new XmlSerializer(typeof(WatcherSettings));
+                var file = new StreamReader(fullFilePath);
                 try
                 {
-                    var reader = new XmlSerializer(typeof (WatcherSettings));
-                    var file = new StreamReader(fullFilePath);
-                    var settings = (WatcherSettings) reader.Deserialize(file);
+                    var settings = (WatcherSettings)reader.Deserialize(file);
                     return settings;
                 }
                 catch (Exception ex)
                 {
                     //if file is corrupt or we can't continue for some reason, just abandon it..
+                    //maybe in the future, we do something smarter. for now, we don't care.
+                }
+                finally
+                {
+                    file.Close();
                 }
             }
             return new WatcherSettings();
@@ -51,8 +52,8 @@ namespace LeveledUp
             var folderPath = GetSaveFolderPath();
             var fullFilePath = Path.Combine(folderPath, SaveFileName);
             var file = new StreamWriter(fullFilePath);
-            
-            var x = new XmlSerializer(this.GetType());
+
+            var x = new XmlSerializer(GetType());
             x.Serialize(file, this);
             file.Close();
         }

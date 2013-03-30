@@ -13,9 +13,9 @@
 
         <Label Content="Leveled UP+ File System Watcher" Background="#0072C6" Foreground="White" Margin="0,0,260,380"/>
         <Label Content="Monitor this folder for changes:" HorizontalAlignment="Left" Margin="24,55,0,0" VerticalAlignment="Top"/>
-        <Button Name="StartStopButton" Content="Start" Background="#0072C6" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="421,250,0,0" VerticalAlignment="Top" Width="75" Click="StartStopButton_Click" Height="32"/>
+        <Button Name="StartStopButton" Content="Start" Background="#0072C6" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="421,250,0,0" VerticalAlignment="Top" Width="75" Click="StartStopButtonClick" Height="32"/>
         <TextBox Name="FolderBox" Padding="5" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="29,78,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="436"/>
-        <Button Name="OpenFolderButton" Content="..." FontWeight="Bold" Background="#0072C6" BorderThickness="0,1,1,1" Foreground="White"  HorizontalAlignment="Left" Margin="465,78,0,0" VerticalAlignment="Top" Width="31" Height="32" Click="OpenFolderButton_Click"/>
+        <Button Name="OpenFolderButton" Content="..." FontWeight="Bold" Background="#0072C6" BorderThickness="0,1,1,1" Foreground="White"  HorizontalAlignment="Left" Margin="465,78,0,0" VerticalAlignment="Top" Width="31" Height="32" Click="OpenFolderButtonClick"/>
         <Label Content="Watch these file types:" HorizontalAlignment="Left" Margin="23,122,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="FileTypeFilterBox" Padding="5" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="29,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="467"/>
         <TextBox Name="LogBox" Padding="5" HorizontalAlignment="Left" Margin="29,310,0,0" TextWrapping="Wrap" Text="" Width="467" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>

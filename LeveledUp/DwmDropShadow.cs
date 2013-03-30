@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing.Printing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -30,17 +26,17 @@ namespace LeveledUp
         {
             if (!DropShadow(window))
             {
-                window.SourceInitialized += new EventHandler(window_SourceInitialized);
+                window.SourceInitialized += WindowSourceInitialized;
             }
         }
 
-        private static void window_SourceInitialized(object sender, EventArgs e)
+        private static void WindowSourceInitialized(object sender, EventArgs e)
         {
             var window = (Window)sender;
 
             DropShadow(window);
 
-            window.SourceInitialized -= new EventHandler(window_SourceInitialized);
+            window.SourceInitialized -= WindowSourceInitialized;
         }
 
         /// <summary>
@@ -58,16 +54,13 @@ namespace LeveledUp
 
                 if (ret1 == 0)
                 {
-                    Margins m = new Margins { Bottom = 0, Left = 0, Right = 0, Top = 0 };
+                    var m = new Margins { Bottom = 0, Left = 0, Right = 0, Top = 0 };
                     int ret2 = DwmExtendFrameIntoClientArea(helper.Handle, ref m);
                     return ret2 == 0;
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Probably dwmapi.dll not found (incompatible OS)
                 return false;

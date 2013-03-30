@@ -11,40 +11,57 @@ namespace LeveledUp
 {
     public partial class MainWindow : Window
     {
-
-        readonly LevelUpWatcher _watcher = new LevelUpWatcher();
-        private WatcherSettings _settings;
-
+        private readonly WatcherSettings _settings;
+        private readonly LevelUpWatcher _watcher;
+        private NotifyIcon _notifyIcon;
+        private readonly MessageServer _server;
 
         public MainWindow()
         {
             InitializeComponent();
             DwmDropShadow.DropShadowToWindow(this);
+
+            //load settings and set UI fields
             _settings = WatcherSettings.Load();
             FolderBox.Text = _settings.FolderToWatch;
             FileTypeFilterBox.Text = _settings.WatchedFileTypes;
             CommandBox.Text = _settings.Command;
 
+            StartTrayIcon();
 
-            SetupTray();
+            _watcher = new LevelUpWatcher();
             _watcher.OnFileChange += _watcher_OnFileChange;
-            MouseDown += Window_MouseDown;
+
+            //make window draggable
+            MouseDown += WindowMouseDown;
+
+            _server = new MessageServer();
+            _server.OnConnectionOpen += _server_OnConnectionOpen;
+            _server.OnConnectionClosed += _server_OnConnectionClosed;
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+
+        void _server_OnConnectionOpen(object sender, EventArgs e)
+        {
+            WriteMessage("Client connected.");
+        }
+
+        void _server_OnConnectionClosed(object sender, EventArgs e)
+        {
+            WriteMessage("Connection closed.");
+        }
+
+        private void WindowMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
                 DragMove();
         }
 
-        private NotifyIcon notifyIcon;
-        private void SetupTray()
+        private void StartTrayIcon()
         {
-            notifyIcon = new NotifyIcon();
-            notifyIcon.Icon = Properties.Resources.mushroom;
-            notifyIcon.Visible = true;
-            notifyIcon.DoubleClick +=
-                delegate(object sender, EventArgs args)
+            _notifyIcon = new NotifyIcon { Icon = Properties.Resources.mushroom, Visible = true };
+            _notifyIcon.DoubleClick +=
+                (sender, args) =>
                 {
                     Show();
                     WindowState = WindowState.Normal;
@@ -59,13 +76,9 @@ namespace LeveledUp
             base.OnStateChanged(e);
         }
 
-        private FileChange _lastFileChange;
         void _watcher_OnFileChange(object sender, FileSystemEventArgs e)
         {
-            if (_lastFileChange != null && e.FullPath == _lastFileChange.FileName && _lastFileChange.Time.AddSeconds(1) > DateTime.Now)
-                return; //duplicate event
 
-            _lastFileChange = new FileChange { Time = DateTime.Now, FileName = e.FullPath };
             WriteMessage("Change detected");
 
             if (!string.IsNullOrWhiteSpace(_settings.Command))
@@ -89,7 +102,7 @@ namespace LeveledUp
             }
             WriteMessage("Notifying clients...");
 
-            SendNotificationMessage("LeveledUp");
+            _server.SendNotificationMessage("LeveledUp");
         }
 
         private void WriteMessage(string message)
@@ -101,7 +114,7 @@ namespace LeveledUp
             });
         }
 
-        private void OpenFolderButton_Click(object sender, RoutedEventArgs e)
+        private void OpenFolderButtonClick(object sender, RoutedEventArgs e)
         {
             var dialog = new FolderBrowserDialog();
             DialogResult result = dialog.ShowDialog();
@@ -109,10 +122,9 @@ namespace LeveledUp
                 FolderBox.Text = dialog.SelectedPath;
         }
 
-        private bool running = false;
-        private void StartStopButton_Click(object sender, RoutedEventArgs e)
+        private void StartStopButtonClick(object sender, RoutedEventArgs e)
         {
-            if (!running)
+            if (!_server.IsRunning)
             {
 
                 if (string.IsNullOrWhiteSpace(FolderBox.Text) || string.IsNullOrWhiteSpace(FileTypeFilterBox.Text))
@@ -126,55 +138,21 @@ namespace LeveledUp
                 _settings.Command = CommandBox.Text.Trim();
 
                 _watcher.Start(_settings.FolderToWatch, _settings.WatchedFileTypes);
-                if (_server == null)
-                    StartNotificationServer();
-                running = true;
-                StartStopButton.Content = "Stop";
 
+                const string serverUrl = "ws://localhost:9797";
+                _server.Start(serverUrl);
+
+                WriteMessage(string.Format("Server running on {0}", serverUrl));
+                StartStopButton.Content = "Stop";
                 _settings.Save();
             }
             else
             {
                 _watcher.Stop();
-                running = false;
+                _server.Stop();
                 StartStopButton.Content = "Start";
+                WriteMessage("Server stopped...");
             }
-        }
-
-        private WebSocketServer _server;
-        private readonly List<IWebSocketConnection> allSockets = new List<IWebSocketConnection>();
-        private void StartNotificationServer()
-        {
-            _server = new WebSocketServer("ws://localhost:9797");
-            _server.Start(socket =>
-                {
-                    socket.OnOpen = () =>
-                        {
-                            WriteMessage("Open!");
-                            allSockets.Add(socket);
-                        };
-                    socket.OnClose = () =>
-                        {
-                            WriteMessage("Close!");
-                            allSockets.Remove(socket);
-                        };
-
-                    socket.OnMessage = message => socket.Send(message);
-                });
-            const string url = "http://localhost:9797";
-
-
-            WriteMessage(string.Format("Server running on {0}", url));
-        }
-
-
-        private void SendNotificationMessage(string message)
-        {
-            if (_server != null)
-                foreach (var socket in allSockets)
-                {
-                    socket.Send(message);
-                }
         }
 
 
@@ -186,7 +164,7 @@ namespace LeveledUp
 
         protected override void OnClosed(EventArgs e)
         {
-            notifyIcon.Dispose();
+            _notifyIcon.Dispose();
         }
 
         private void MinimizeWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
