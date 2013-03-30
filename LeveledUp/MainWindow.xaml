@@ -18,9 +18,8 @@
         <Button Name="OpenFolderButton" Content="..." FontWeight="Bold" Background="#0072C6" BorderThickness="0,1,1,1" Foreground="White"  HorizontalAlignment="Left" Margin="465,78,0,0" VerticalAlignment="Top" Width="31" Height="32" Click="OpenFolderButtonClick"/>
         <Label Content="Watch these file types:" HorizontalAlignment="Left" Margin="23,122,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="FileTypeFilterBox" Padding="5" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="29,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="467"/>
-        <TextBox Name="LogBox" Padding="5" HorizontalAlignment="Left" Margin="29,310,0,0" TextWrapping="Wrap" Text="" Width="467" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
-        <Label Content="Log:" HorizontalAlignment="Left" Margin="29,288,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,1.25"/>
-        <Label Content="Run this command:" HorizontalAlignment="Left" Margin="25,186,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="LogBox" Padding="5" HorizontalAlignment="Left" Margin="29,310,0,0" TextWrapping="Wrap" Text="Oh, hello there." Width="467" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+        <Label Content="Run this command when files change:" HorizontalAlignment="Left" Margin="25,186,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="CommandBox" Padding="5" Height="32" Margin="29,209,29,0" VerticalContentAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
 
     </Grid>

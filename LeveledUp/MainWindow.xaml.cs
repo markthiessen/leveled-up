@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Fleck;
 using System.Diagnostics;
 
 namespace LeveledUp
@@ -109,7 +107,7 @@ namespace LeveledUp
         {
             Dispatcher.Invoke(() =>
             {
-                LogBox.AppendText(message + Environment.NewLine);
+                LogBox.AppendText(Environment.NewLine+ message);
                 LogBox.ScrollToEnd();
             });
         }
