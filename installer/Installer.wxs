@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+	<Bundle Name="Leveled UP+" Version="1.0.0.0" Manufacturer="Mark Thiessen" UpgradeCode="F4DC9ECA-0176-4E01-816E-2CA336461B2F">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
+			<bal:WixStandardBootstrapperApplication
+				LicenseFile="License.rtf"
+				LogoFile="logo.png"
+			/>	
+		</BootstrapperApplicationRef>
+
+		<Chain>
+                        <MsiPackage SourceFile="bin\LeveledUpMSI\LeveledUp.msi" EnableFeatureSelection="yes" DisplayInternalUI="yes">
+                                <MsiProperty Name="INSTALLLLEVEL" Value="1" /> 
+                        </MsiPackage>
+		</Chain>
+	</Bundle>
+</Wix>
