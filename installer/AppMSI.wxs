@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Product Id="*" Name="Leveled UP+" Language="1033" Version="1.0.0.0" Manufacturer="Mark Thiessen" UpgradeCode="2A4F7735-5579-4126-ABB3-D8BBFD27D015">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="APPINSTALLDIR" Name="LeveledUp"/>
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="LeveledUp"/>
+			</Directory>
+		</Directory>
+	
+		<Feature Id="ProductFeature" Title="LeveledUp" Level="1" Display="hidden">
+			<ComponentGroupRef Id="Application"/>
+			<ComponentRef Id="LeveledUp.Shortcut" />
+		</Feature>
+
+		<Feature Id="ChromeExt" Title="Chrome Extension" Level="5" Display="collapse">
+			<Component Directory="APPINSTALLDIR" Id="ChromeComponents" Guid="CCFB5C79-78FB-4F48-903C-6841B7B71189" KeyPath="yes">
+				<File Source="..\chrome_extension\chrome_extension.crx" Id="chrome_extension.crx"/>
+			</Component>
+		</Feature>
+
+		<PropertyRef Id="NETFRAMEWORK45"/>
+		<Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+			<![CDATA[Installed OR NETFRAMEWORK45]]>
+		</Condition>
+	</Product>
+	<Fragment>
+	<DirectoryRef Id="ApplicationProgramsFolder">
+		<Component Id="LeveledUp.Shortcut" Guid="83B72786-2904-4A53-9A2D-60B88011D0D9">
+			<Shortcut Id="ApplicationShortcut"
+					   Name="Leveled UP+"
+					   Target="[APPINSTALLDIR]LeveledUp.exe"
+					   WorkingDirectory="APPINSTALLDIR"
+					  />
+			<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+			<RegistryValue Root="HKCU" Key="Software\FocalPoint\LeveledUp" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+		</Component>
+	</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="Application" Directory="APPINSTALLDIR">
+			<Component Id="ApplicationComponent" Guid="BCFB5C79-78FB-4F48-903C-6841B7B71189" KeyPath="yes">
+				<File Source="..\LeveledUp\bin\Release\LeveledUp.exe" Id="LeveledUp.exe"/>
+				<File Source="..\LeveledUp\bin\Release\LeveledUp.exe.config" Id="LeveledUp.exe.config"/>
+				<File Source="..\LeveledUp\bin\Release\Fleck.dll" Id="Fleck.dll"/>
+				<File Source="..\LeveledUp\README.txt" Id="README.txt"/>
+		
+				<RemoveFolder Id="APPINSTALLDIR" On="uninstall"/>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
