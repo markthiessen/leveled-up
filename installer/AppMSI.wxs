@@ -20,7 +20,7 @@
 			<ComponentRef Id="LeveledUp.Shortcut" />
 		</Feature>
 
-		<Feature Id="ChromeExt" Title="Chrome Extension" Level="5" Display="collapse">
+		<Feature Id="ChromeExt" Title="Chrome Extension" Level="1" Display="collapse">
 			<Component Directory="APPINSTALLDIR" Id="ChromeComponents" Guid="CCFB5C79-78FB-4F48-903C-6841B7B71189" KeyPath="yes">
 				<File Source="..\chrome_extension\chrome_extension.crx" Id="chrome_extension.crx"/>
 			</Component>
