@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace LeveledUp
 {
@@ -36,6 +37,20 @@ namespace LeveledUp
             _server = new MessageServer();
             _server.OnConnectionOpen += _server_OnConnectionOpen;
             _server.OnConnectionClosed += _server_OnConnectionClosed;
+
+            ExtensionIcon.PreviewMouseDown += ExtensionIcon_PreviewMouseDown;
+        }
+
+        void ExtensionIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string path = Path.Combine(Path.GetDirectoryName(
+                                            Assembly.GetExecutingAssembly()
+                                                    .Location
+                                            ), "chrome_extension.crx");
+            string[] files = new[] { path };
+            string dataFormat = System.Windows.DataFormats.FileDrop;
+            var dataObject = new System.Windows.DataObject(dataFormat, files);
+            DragDrop.DoDragDrop(this.ExtensionIcon, dataObject, System.Windows.DragDropEffects.Copy);
         }
 
 
@@ -52,7 +67,14 @@ namespace LeveledUp
         private void WindowMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                DragMove();
+            {
+                try
+                {
+                    DragMove();
+                }
+                catch (Exception)
+                {}
+            }
         }
 
         private void StartTrayIcon()
@@ -107,7 +129,7 @@ namespace LeveledUp
         {
             Dispatcher.Invoke(() =>
             {
-                LogBox.AppendText(Environment.NewLine+ message);
+                LogBox.AppendText(Environment.NewLine + message);
                 LogBox.ScrollToEnd();
             });
         }
@@ -141,6 +163,7 @@ namespace LeveledUp
                 _server.Start(serverUrl);
 
                 WriteMessage(string.Format("Server running on {0}", serverUrl));
+                WriteMessage(string.Format("Now start the browser extension by clicking the mushroom icon on the page you want to auto-refresh."));
                 StartStopButton.Content = "Stop";
                 _settings.Save();
             }
@@ -174,6 +197,7 @@ namespace LeveledUp
             SystemCommands.CloseWindow(this);
 
         }
+
     }
 
     public class FileChange

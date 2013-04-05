@@ -1,26 +1,28 @@
 ﻿<Window x:Class="LeveledUp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Leveled UP+" Height="417" Width="525" FontFamily="Tahoma" FontSize="14" WindowStyle="None" ResizeMode="NoResize">
+        Title="Leveled UP+" Height="487" Width="525" FontFamily="Tahoma" FontSize="14" WindowStyle="None" ResizeMode="NoResize">
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" Executed="CloseWindowCommand_OnExecuted" />
         <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" Executed="MinimizeWindowCommand_OnExecuted"/>
     </Window.CommandBindings>
-    <Grid Margin="0,0,0,0" Height="407" VerticalAlignment="Top">
+    <Grid Margin="0,0,0,0" VerticalAlignment="Top">
         <Button Command="{x:Static SystemCommands.MinimizeWindowCommand}" Background="White" BorderThickness="0" Content="_" Margin="484,4,24,384" />
         <Button Command="{x:Static SystemCommands.CloseWindowCommand}" Background="White" BorderThickness="0" Content="x" Margin="504,4,4,384" />
 
 
-        <Label Content="Leveled UP+ File System Watcher" Background="#0072C6" Foreground="White" Margin="0,0,260,380"/>
+        <Label Content="Leveled UP+ File System Watcher" Background="#0072C6"  Foreground="White" Margin="0,0,260,380"/>
         <Label Content="Monitor this folder for changes:" HorizontalAlignment="Left" Margin="24,55,0,0" VerticalAlignment="Top"/>
         <Button Name="StartStopButton" Content="Start" Background="#0072C6" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Margin="421,250,0,0" VerticalAlignment="Top" Width="75" Click="StartStopButtonClick" Height="32"/>
         <TextBox Name="FolderBox" Padding="5" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="29,78,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="436"/>
         <Button Name="OpenFolderButton" Content="..." FontWeight="Bold" Background="#0072C6" BorderThickness="0,1,1,1" Foreground="White"  HorizontalAlignment="Left" Margin="465,78,0,0" VerticalAlignment="Top" Width="31" Height="32" Click="OpenFolderButtonClick"/>
         <Label Content="Watch these file types:" HorizontalAlignment="Left" Margin="23,122,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="FileTypeFilterBox" Padding="5" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="32" Margin="29,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="467"/>
-        <TextBox Name="LogBox" Padding="5" HorizontalAlignment="Left" Margin="29,310,0,0" TextWrapping="Wrap" Text="Oh, hello there." Width="467" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+        <TextBox Name="LogBox" Padding="5" HorizontalAlignment="Left" Margin="29,324,0,-14" TextWrapping="Wrap" Text="Oh, hello there." Width="467" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
         <Label Content="Run this command when files change:" HorizontalAlignment="Left" Margin="25,186,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="CommandBox" Padding="5" Height="32" Margin="29,209,29,0" VerticalContentAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <Image x:Name="ExtensionIcon" HorizontalAlignment="Left" Height="32" Margin="465,434,0,-59" Source="chrome-logo.png" VerticalAlignment="Top" Width="31" RenderTransformOrigin="0.158,0.531"/>
+        <Label Content="To install the Chrome extension, just drag and drop the icon onto the Tools->Extensions window in Chrome." FontSize="10" HorizontalAlignment="Left" Height="22" Margin="12,466,0,-81" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
