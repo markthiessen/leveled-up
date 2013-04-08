@@ -2,7 +2,15 @@ $dir = Split-Path -parent $PSCommandPath
 
 & MSBuild.exe /t:Rebuild "$dir\LeveledUp.sln"
 
-& "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --pack-extension="$dir\chrome_extension\src\" --pack-extension-key="$dir\chrome_extension\chrome_extension.pem"
+$pathToChrome = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+#chrome might be installed in appdata folder
+$appDataChromeInstallFolder = $env:LOCALAPPDATA + "\Google\Chrome\Application\chrome.exe"
+if(Test-Path $appDataChromeInstallFolder)
+{
+    $pathToChrome = $appDataChromeInstallFolder
+}
+
+& "$pathToChrome" --pack-extension="$dir\chrome_extension\src\" --pack-extension-key="$dir\chrome_extension\chrome_extension.pem"
 
 [System.Threading.Thread]::Sleep(1000)
 move -Force "$dir\chrome_extension\src.crx" "$dir\chrome_extension\chrome_extension.crx"
