@@ -1,6 +1,6 @@
-$dir = Split-Path -parent $PSCommandPath
+$dir = Split-Path -parent $MyInvocation.MyCommand.Path
 
-& MSBuild.exe /t:Rebuild "$dir\LeveledUp.sln"
+& MSBuild.exe /t:Rebuild "$dir\LeveledUp.sln" /p:Configuration=Release
 
 $pathToChrome = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
 #chrome might be installed in appdata folder
@@ -16,4 +16,4 @@ if(Test-Path $appDataChromeInstallFolder)
 move -Force "$dir\chrome_extension\src.crx" "$dir\chrome_extension\chrome_extension.crx"
 
 & MSBuild.exe "$dir\Installer\Installer.wixproj" /t:Rebuild /p:Configuration=Release /p:Platform="x64"
-copy "$dir\Installer\bin\x64\Release\*.exe" "$dir\build\"
+copy -Force "$dir\Installer\bin\x64\Release\*.exe" "$dir\build\"
