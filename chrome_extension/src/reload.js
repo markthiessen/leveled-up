@@ -12,5 +12,8 @@
 			window.localStorage.setItem('lastKnowScrollLocation', window.pageYOffset);
 			window.location.reload(); 
 		};
+		ws.onclose = function () {
+			_connectedToLeveledUpServer=false;
+		};
 	})();
 }
