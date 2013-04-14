@@ -157,6 +157,11 @@ aside a.button {
   font-size: 21px;
 }
 
+aside a.button.cta {
+  background: transparent url(../images/download-button-cta.png) 0 0 no-repeat;
+}
+
+
 code, pre {
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   color: #222;
@@ -275,12 +280,6 @@ form {
   color: #474747;
 } 
 
-h4:before {
-  content: "////";
-  color: #9ddcff;
-  padding-right: 0.3em;
-  margin-left: -2.8em;
-}
 
 #main-content h5 {
   font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif; 
@@ -333,6 +332,7 @@ ul li {
 ol li {
   list-style: decimal inside;
   padding-left: 3px;
+  padding-bottom:20px;
 }
 
 dl dd {
