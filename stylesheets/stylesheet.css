@@ -127,6 +127,7 @@ aside#sidebar p.repo-owner a {
 #downloads {
   margin-bottom: 40px;
 }
+strong{font-weight:bold;}
 
 a.button {
   width: 134px;
