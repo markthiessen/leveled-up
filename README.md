@@ -30,7 +30,7 @@ Start up LeveledUp.exe
 Use the chrome extension.
 
 1. If you haven't yet installed the extension, go to Tools->Extensions and then
-  drag the .crx file onto the chrome window and click 'Add'.
+  drag the chrome icon at the bottom of LeveledUP onto the chrome window and click 'Add'.
 
 2. Navigate to the site you're working on in chrome.
 
@@ -40,3 +40,9 @@ Use the chrome extension.
 
    Now when you make changes to files in your project, your browser should automatically reload, saving you time
    and millions of dollars!
+   
+  
+To Build
+====================
+Prereqs:  Wix 3.7+  is needed to build the installer.
+
