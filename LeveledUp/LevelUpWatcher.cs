@@ -30,6 +30,7 @@ namespace LeveledUp
                     };
 
                 watcher.Changed += OnChanged;
+                watcher.Renamed += OnChanged;
 
                 // Begin watching.
                 watcher.EnableRaisingEvents = true;
