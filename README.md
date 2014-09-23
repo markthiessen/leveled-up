@@ -29,8 +29,8 @@ Start up LeveledUp.exe
 
 Use the chrome extension.
 
-1. If you haven't yet installed the extension, go to Tools->Extensions and then
-  drag the chrome icon at the bottom of LeveledUP onto the chrome window and click 'Add'.
+1. If you haven't yet installed the extension, go to Tools->Extensions and ensure that the 'Developer' checkbox is set.
+  Drag the chrome icon at the bottom of LeveledUP onto the chrome window and click 'Add'.
 
 2. Navigate to the site you're working on in chrome.
 
