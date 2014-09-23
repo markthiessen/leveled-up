@@ -109,3 +109,5 @@ UpgradeLog*.XML
 
 #Chrome Ext
 *.crx
+
+build/
