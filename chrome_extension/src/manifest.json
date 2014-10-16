@@ -10,7 +10,7 @@
     "default_icon": "icon.png"
   },
   "permissions": [
-    "tabs", "<all_urls>", "notifications"
+    "tabs", "<all_urls>", "nativeMessaging"
   ],
   "web_accessible_resources": [
     "icon.png"

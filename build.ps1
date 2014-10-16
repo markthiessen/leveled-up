@@ -16,4 +16,4 @@ if(Test-Path $appDataChromeInstallFolder)
 move -Force "$dir\chrome_extension\src.crx" "$dir\chrome_extension\chrome_extension.crx"
 
 & MSBuild.exe "$dir\Installer\Installer.wixproj" /t:Rebuild /p:Configuration=Release /p:Platform="x64"
-copy -Force "$dir\Installer\bin\x64\Release\*.exe" "$dir\build\"
+#copy -Force "$dir\Installer\bin\x64\Release\*.exe" "$dir\build\"

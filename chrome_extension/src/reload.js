@@ -1,19 +1,21 @@
- if(_connectedToLeveledUpServer==null)
- 	var _connectedToLeveledUpServer=false;
- if(!_connectedToLeveledUpServer){
-	 (function(){
-	 	window.scroll(0, window.localStorage.getItem('lastKnowScrollLocation'));
-		var ws = new WebSocket("ws://localhost:9797"); 
-		ws.onopen = function () { 
-		    console.log('Connected to leveledUp change notification server....');
-		    _connectedToLeveledUpServer=true;
-		};				 
-		ws.onmessage = function (evt) { 
-			window.localStorage.setItem('lastKnowScrollLocation', window.pageYOffset);
-			window.location.reload(); 
-		};
-		ws.onclose = function () {
-			_connectedToLeveledUpServer=false;
-		};
-	})();
-}
+ (function(){
+
+ 	console.log('Leveled UP: Changes detected.');
+
+	//window.scroll(0, window.localStorage.getItem('lastKnowScrollLocation'));
+
+     //window.localStorage.setItem('lastKnowScrollLocation', window.pageYOffset);
+
+     if (scriptOptions.reloadCss) {
+         var links = document.getElementsByTagName("link");
+         for (var i = 0; i < links.length; i++) {
+             var link = links[i];
+             if (link.rel === "stylesheet") {
+                 var queryString = '?reload=' + new Date().getTime();
+                 link.href = link.href.replace(/\?.*|$/, queryString);
+             }
+         }
+     }
+     else
+         window.location.reload();
+})();

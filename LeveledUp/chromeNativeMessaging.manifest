@@ -1,0 +1,9 @@
+﻿{
+  "name": "com.markthiessen.leveledup",
+  "description": "Leveled Up",
+  "path": "LeveledUp.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://hligihpdlnbdganmmbmkpppbhbhclmdc/"
+  ]
+}

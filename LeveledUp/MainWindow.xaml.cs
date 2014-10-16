@@ -17,6 +17,8 @@ namespace LeveledUp
 
         public MainWindow()
         {
+            KillOtherInstances();
+
             InitializeComponent();
             DwmDropShadow.DropShadowToWindow(this);
 
@@ -39,6 +41,15 @@ namespace LeveledUp
             _server.OnConnectionClosed += _server_OnConnectionClosed;
 
             ExtensionIcon.PreviewMouseDown += ExtensionIcon_PreviewMouseDown;
+        }
+
+        private void KillOtherInstances()
+        {
+            foreach (var process in Process.GetProcessesByName("LeveledUp"))
+            {
+                if(process.Id!=Process.GetCurrentProcess().Id)
+                    process.Kill();
+            }
         }
 
         void ExtensionIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -122,7 +133,7 @@ namespace LeveledUp
             }
             WriteMessage("Notifying clients...");
 
-            _server.SendNotificationMessage("LeveledUp");
+            _server.SendNotificationMessage("LeveledUp:"+ Path.GetExtension(e.FullPath));
         }
 
         private void WriteMessage(string message)
@@ -159,7 +170,7 @@ namespace LeveledUp
 
                 _watcher.Start(_settings.FolderToWatch, _settings.WatchedFileTypes);
 
-                const string serverUrl = "ws://localhost:9797";
+                const string serverUrl = "wss://localhost:9797";
                 _server.Start(serverUrl);
 
                 WriteMessage(string.Format("Server running on {0}", serverUrl));
@@ -175,14 +186,7 @@ namespace LeveledUp
                 WriteMessage("Server stopped...");
             }
         }
-
-
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            if (_server != null)
-                _server.Dispose();
-        }
-
+        
         protected override void OnClosed(EventArgs e)
         {
             _notifyIcon.Dispose();
